@@ -567,11 +567,13 @@ def remove_from_cart(product_id):
     if product_id in st.session_state.cart:
         del st.session_state.cart[product_id]
         st.success("🗑️ Item removed from cart")
+        st.rerun()
 
 def clear_cart():
     """Clear all items from cart"""
     st.session_state.cart.clear()
     st.success("✨ Cart cleared!")
+    st.rerun()
 
 def toggle_wishlist(product_id):
     """Add/remove from wishlist"""
@@ -582,6 +584,7 @@ def toggle_wishlist(product_id):
         st.session_state.wishlist.add(product_id)
         st.success("💖 Added to wishlist!")
         st.balloons()
+    st.rerun()
 
 def checkout():
     """Process checkout with colorful celebration"""
@@ -623,6 +626,7 @@ def checkout():
         </p>
     </div>
     """, unsafe_allow_html=True)
+    st.rerun()
 
 def calculate_cart_total():
     """Calculate total cart value"""
@@ -713,10 +717,8 @@ def display_colorful_product_card(product, tab_name=""):
             
             # Tags
             if "tags" in product:
-                tag_cols = st.columns(len(product["tags"]))
                 for idx, tag in enumerate(product["tags"]):
-                    with tag_cols[idx]:
-                        st.markdown(f'<span style="background:{COLORS["info"]}20; color:{COLORS["info"]}; padding:2px 8px; border-radius:10px; font-size:0.7rem;">{tag}</span>', unsafe_allow_html=True)
+                    st.markdown(f'<span style="background:{COLORS["info"]}20; color:{COLORS["info"]}; padding:2px 8px; border-radius:10px; font-size:0.7rem; margin-right:5px;">{tag}</span>', unsafe_allow_html=True)
             
             # Rating
             full_stars = int(product["rating"])
@@ -770,47 +772,55 @@ def display_colorful_product_card(product, tab_name=""):
             
             st.markdown(f'<div style="color: {stock_color}; font-size: 0.9rem; margin: 5px 0;">{stock_text}</div>', unsafe_allow_html=True)
         
-        # Action buttons
+        # Action buttons with unique keys
         col1, col2, col3 = st.columns([2, 2, 1])
         
         with col1:
+            # Unique quantity key for this tab and product
+            qty_key = f"qty_{product['id']}_{tab_name}"
             quantity = st.number_input(
                 "Quantity", 
                 min_value=1, 
                 max_value=min(10, product["stock"]), 
                 value=1,
-                key=f"qty_{product['id']}_{tab_name}",
+                key=qty_key,
                 label_visibility="collapsed"
             )
         
         with col2:
             if product["stock"] > 0:
+                # Unique add to cart key for this tab and product
+                add_key = f"add_{product['id']}_{tab_name}"
                 if st.button(
                     "🛒 Add to Cart",
-                    key=f"add_{product['id']}_{tab_name}",
+                    key=add_key,
                     use_container_width=True,
                     type="secondary"
                 ):
                     add_to_cart(product["id"], quantity)
             else:
+                out_key = f"out_{product['id']}_{tab_name}"
                 st.button(
                     "😔 Out of Stock",
                     disabled=True,
                     use_container_width=True,
-                    key=f"out_{product['id']}_{tab_name}"
+                    key=out_key
                 )
         
         with col3:
+            # Unique wishlist key for this tab and product
+            wish_key = f"wish_{product['id']}_{tab_name}"
             wishlist_icon = "💖" if product["id"] in st.session_state.wishlist else "🤍"
             if st.button(
                 wishlist_icon,
-                key=f"wish_{product['id']}_{tab_name}",
+                key=wish_key,
                 use_container_width=True
             ):
                 toggle_wishlist(product["id"])
         
-        # Product details expander
-        with st.expander("✨ Details & Reviews", key=f"exp_{product['id']}_{tab_name}"):
+        # Product details expander with unique key
+        expander_key = f"exp_{product['id']}_{tab_name}"
+        with st.expander("✨ Details & Reviews", key=expander_key):
             st.write(product["description"])
             st.progress(product["rating"] / 5, text=f"Rating: {product['rating']}/5")
             
@@ -877,7 +887,7 @@ def display_colorful_sidebar():
             </div>
             """, unsafe_allow_html=True)
         else:
-            for product_id, quantity in st.session_state.cart.items():
+            for idx, (product_id, quantity) in enumerate(st.session_state.cart.items()):
                 product = get_product_by_id(product_id)
                 if product:
                     col1, col2, col3 = st.columns([3, 2, 1])
@@ -886,9 +896,9 @@ def display_colorful_sidebar():
                     with col2:
                         st.write(f"${product['price']} × {quantity}")
                     with col3:
-                        if st.button("🗑️", key=f"remove_{product_id}"):
+                        remove_key = f"remove_{product_id}_{idx}"
+                        if st.button("🗑️", key=remove_key):
                             remove_from_cart(product_id)
-                            st.rerun()
             
             st.divider()
             
@@ -929,26 +939,24 @@ def display_colorful_sidebar():
             # Checkout buttons
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("🗑️ Clear Cart", use_container_width=True, type="secondary", key="clear_cart_btn"):
+                if st.button("🗑️ Clear Cart", use_container_width=True, type="secondary", key="clear_cart"):
                     clear_cart()
-                    st.rerun()
             with col2:
-                if st.button("🚀 Checkout Now", use_container_width=True, type="primary", key="checkout_btn"):
+                if st.button("🚀 Checkout Now", use_container_width=True, type="primary", key="checkout"):
                     checkout()
-                    st.rerun()
         
         # Wishlist section
         if st.session_state.wishlist:
             st.divider()
-            with st.expander(f"💖 Wishlist ({len(st.session_state.wishlist)})"):
+            with st.expander(f"💖 Wishlist ({len(st.session_state.wishlist)})", key="wishlist_expander"):
                 for product_id in list(st.session_state.wishlist)[:5]:
                     product = get_product_by_id(product_id)
                     if product:
                         st.write(f"{product['emoji']} {product['name']} - ${product['price']}")
         
-        # Promo code
+        # Promo code section with unique key
         st.divider()
-        with st.expander("🎁 Promo Codes", key="promo_expander"):
+        with st.expander("🎁 Promo Codes", key="promo_codes_expander"):
             st.code("VIBECART20 - 20% off all orders")
             st.code("COLORME50 - $50 off orders over $200")
             st.code("RAINBOW10 - 10% off colorful items")
@@ -958,19 +966,19 @@ def display_products_with_tabs():
     tab1, tab2, tab3, tab4 = st.tabs(["🌈 All Products", "🔥 On Sale", "💖 Wishlist", "🎯 Recommended"])
     
     with tab1:
-        display_product_grid("all")
+        display_product_grid("all_products")
     
     with tab2:
         sale_products = [p for p in PRODUCTS if p.get("on_sale", False)]
         if sale_products:
-            display_product_grid("sale", sale_products)
+            display_product_grid("on_sale", sale_products)
         else:
             st.info("No items on sale at the moment")
     
     with tab3:
         wishlist_products = [p for p in PRODUCTS if p["id"] in st.session_state.wishlist]
         if wishlist_products:
-            display_product_grid("wishlist", wishlist_products)
+            display_product_grid("wishlist_items", wishlist_products)
         else:
             st.info("Add items to your wishlist by clicking the 💖 button!")
     
@@ -989,7 +997,7 @@ def display_products_with_tabs():
             recommended = [p for p in PRODUCTS if p["rating"] >= 4.7][:4]
         
         if recommended:
-            display_product_grid("recommended", recommended[:8])
+            display_product_grid("recommended_items", recommended[:8])
         else:
             st.info("Browse products to get recommendations!")
 
@@ -1140,8 +1148,6 @@ def main():
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                cursor: pointer;
-                transition: transform 0.3s;
             '>
                 <div style='font-size: 2.5rem; margin-bottom: 0.5rem;'>{collection['emoji']}</div>
                 <h3 style='margin: 0;'>{collection['name']}</h3>
