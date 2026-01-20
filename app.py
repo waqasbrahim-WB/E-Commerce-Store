@@ -34,38 +34,18 @@ COLORS = {
     "orange": "#F8961E"      # Orange
 }
 
-# Custom CSS with Beautiful Background
+# Custom CSS with Vibrant Theme
 st.markdown(f"""
 <style>
-    /* Main styling with beautiful gradient background */
+    /* Main styling with gradient background */
     .stApp {{
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #ffd166 100%);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
-        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     }}
     
-    @keyframes gradientBG {{
-        0% {{ background-position: 0% 50%; }}
-        50% {{ background-position: 100% 50%; }}
-        100% {{ background-position: 0% 50%; }}
-    }}
-    
-    /* Main content area with glass effect */
-    .main .block-container {{
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 2rem;
-        margin-top: 1rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }}
-    
-    /* Vibrant header with glow effect */
+    /* Vibrant header */
     .main-header {{
         font-size: 3.5rem;
-        background: linear-gradient(45deg, {COLORS['primary']}, {COLORS['purple']}, {COLORS['secondary']}, {COLORS['accent']});
+        background: linear-gradient(45deg, {COLORS['primary']}, {COLORS['purple']}, {COLORS['secondary']});
         background-size: 300% 300%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -73,7 +53,7 @@ st.markdown(f"""
         margin-bottom: 1rem;
         animation: gradientShift 5s ease infinite;
         font-weight: 800;
-        text-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     }}
     
     @keyframes gradientShift {{
@@ -83,28 +63,25 @@ st.markdown(f"""
     }}
     
     .sub-header {{
-        color: white;
+        color: {COLORS['dark']};
         text-align: center;
         margin-bottom: 2rem;
         font-size: 1.2rem;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        font-weight: 500;
+        opacity: 0.8;
     }}
     
-    /* Colorful product cards with glass effect */
+    /* Colorful product cards */
     .product-card {{
         border: none;
         border-radius: 20px;
         padding: 1.5rem;
         margin: 0.5rem;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        background: white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         height: 100%;
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.3);
     }}
     
     .product-card::before {{
@@ -115,27 +92,18 @@ st.markdown(f"""
         width: 100%;
         height: 5px;
         background: linear-gradient(90deg, {COLORS['primary']}, {COLORS['secondary']}, {COLORS['accent']});
-        background-size: 200% 200%;
-        animation: gradientFlow 3s ease infinite;
-    }}
-    
-    @keyframes gradientFlow {{
-        0% {{ background-position: 0% 50%; }}
-        50% {{ background-position: 100% 50%; }}
-        100% {{ background-position: 0% 50%; }}
     }}
     
     .product-card:hover {{
         transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-        background: rgba(255, 255, 255, 1);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     }}
     
     .product-emoji {{
         font-size: 3rem;
         text-align: center;
         margin-bottom: 1rem;
-        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
         animation: float 3s ease-in-out infinite;
     }}
     
@@ -169,10 +137,10 @@ st.markdown(f"""
         color: white;
         margin: 0.3rem 0;
         font-weight: 600;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }}
     
-    /* Vibrant buttons with glow */
+    /* Vibrant buttons */
     .stButton button {{
         width: 100%;
         border-radius: 12px;
@@ -181,12 +149,12 @@ st.markdown(f"""
         font-weight: 700;
         transition: all 0.3s;
         font-size: 1rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }}
     
     .stButton button:hover {{
         transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.15);
     }}
     
     .add-to-cart-btn {{
@@ -196,16 +164,11 @@ st.markdown(f"""
     
     .add-to-cart-btn:hover {{
         background: linear-gradient(45deg, {COLORS['secondary']}, {COLORS['success']});
-        box-shadow: 0 0 15px {COLORS['success']};
     }}
     
     .checkout-btn {{
         background: linear-gradient(45deg, {COLORS['primary']}, {COLORS['warning']});
         color: white;
-    }}
-    
-    .checkout-btn:hover {{
-        box-shadow: 0 0 15px {COLORS['primary']};
     }}
     
     .wishlist-btn {{
@@ -220,10 +183,8 @@ st.markdown(f"""
     
     /* Colorful sidebar */
     .sidebar .sidebar-content {{
-        background: linear-gradient(180deg, rgba(7, 59, 76, 0.9), rgba(10, 76, 99, 0.9));
-        backdrop-filter: blur(10px);
+        background: linear-gradient(180deg, {COLORS['dark']} 0%, #0a4c63 100%);
         color: white;
-        border-right: 2px solid rgba(255, 255, 255, 0.2);
     }}
     
     .cart-badge {{
@@ -280,14 +241,10 @@ st.markdown(f"""
     /* Tabs styling */
     .stTabs [data-baseweb="tab-list"] {{
         gap: 8px;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(5px);
-        border-radius: 10px;
-        padding: 5px;
     }}
     
     .stTabs [data-baseweb="tab"] {{
-        background: rgba(255, 255, 255, 0.8);
+        background: white;
         border-radius: 10px 10px 0 0;
         padding: 10px 20px;
         border: none;
@@ -297,19 +254,17 @@ st.markdown(f"""
     .stTabs [aria-selected="true"] {{
         background: linear-gradient(45deg, {COLORS['primary']}, {COLORS['purple']}) !important;
         color: white !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }}
     
     /* Metric cards */
     .metric-card {{
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(5px);
+        background: white;
         border-radius: 15px;
         padding: 1.5rem;
         margin: 0.5rem;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-top: 5px solid {COLORS['info']};
     }}
     
     .metric-value {{
@@ -321,13 +276,11 @@ st.markdown(f"""
     
     /* Footer */
     .footer {{
-        background: linear-gradient(90deg, rgba(7, 59, 76, 0.9), rgba(17, 138, 178, 0.9));
-        backdrop-filter: blur(10px);
+        background: linear-gradient(90deg, {COLORS['dark']}, {COLORS['info']});
         color: white;
         padding: 2rem;
         border-radius: 20px;
         margin-top: 3rem;
-        border: 1px solid rgba(255, 255, 255, 0.2);
     }}
     
     /* Responsive design */
@@ -341,28 +294,51 @@ st.markdown(f"""
         .product-emoji {{
             font-size: 2.5rem;
         }}
-        .stApp {{
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-        }}
     }}
     
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {{
-        width: 10px;
+    /* Loading animation */
+    .loading-dots {{
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
     }}
-    
-    ::-webkit-scrollbar-track {{
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
+    .loading-dots div {{
+        position: absolute;
+        top: 33px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: {COLORS['primary']};
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
     }}
-    
-    ::-webkit-scrollbar-thumb {{
-        background: linear-gradient(45deg, {COLORS['primary']}, {COLORS['purple']});
-        border-radius: 10px;
+    .loading-dots div:nth-child(1) {{
+        left: 8px;
+        animation: loading1 0.6s infinite;
     }}
-    
-    ::-webkit-scrollbar-thumb:hover {{
-        background: linear-gradient(45deg, {COLORS['purple']}, {COLORS['primary']});
+    .loading-dots div:nth-child(2) {{
+        left: 8px;
+        animation: loading2 0.6s infinite;
+    }}
+    .loading-dots div:nth-child(3) {{
+        left: 32px;
+        animation: loading2 0.6s infinite;
+    }}
+    .loading-dots div:nth-child(4) {{
+        left: 56px;
+        animation: loading3 0.6s infinite;
+    }}
+    @keyframes loading1 {{
+        0% {{ transform: scale(0); }}
+        100% {{ transform: scale(1); }}
+    }}
+    @keyframes loading3 {{
+        0% {{ transform: scale(1); }}
+        100% {{ transform: scale(0); }}
+    }}
+    @keyframes loading2 {{
+        0% {{ transform: translate(0, 0); }}
+        100% {{ transform: translate(24px, 0); }}
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -376,8 +352,6 @@ if 'wishlist' not in st.session_state:
     st.session_state.wishlist = set()
 if 'viewed_products' not in st.session_state:
     st.session_state.viewed_products = []
-if 'filter_selections' not in st.session_state:
-    st.session_state.filter_selections = {}
 
 # Enhanced Product Data with More Items
 PRODUCTS = [
@@ -390,7 +364,7 @@ PRODUCTS = [
         "description": "Vibrant colorful sneakers with rainbow gradient design",
         "rating": 4.7,
         "stock": 15,
-        "image_color": "#FF6B6B",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": True,
         "original_price": 119.99,
         "tags": ["Trending", "Limited"]
@@ -404,7 +378,7 @@ PRODUCTS = [
         "description": "RGB LED headphones with neon glow and 40hr battery",
         "rating": 4.9,
         "stock": 8,
-        "image_color": "#4ECDC4",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": False,
         "tags": ["Bestseller", "New"]
     },
@@ -417,7 +391,7 @@ PRODUCTS = [
         "description": "Organic cotton tie-dye t-shirt in psychedelic colors",
         "rating": 4.5,
         "stock": 25,
-        "image_color": "#FFD166",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": True,
         "original_price": 39.99,
         "tags": ["Eco-Friendly"]
@@ -431,7 +405,7 @@ PRODUCTS = [
         "description": "Color-changing display with animated watch faces",
         "rating": 4.8,
         "stock": 5,
-        "image_color": "#06D6A0",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": False,
         "tags": ["Premium", "Smart"]
     },
@@ -444,7 +418,7 @@ PRODUCTS = [
         "description": "Waterproof backpack with color-changing panels",
         "rating": 4.6,
         "stock": 12,
-        "image_color": "#118AB2",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": True,
         "original_price": 139.99,
         "tags": ["Waterproof"]
@@ -458,7 +432,7 @@ PRODUCTS = [
         "description": "Non-slip yoga mat with mandala rainbow pattern",
         "rating": 4.4,
         "stock": 20,
-        "image_color": "#EF476F",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": False,
         "tags": ["Fitness"]
     },
@@ -471,7 +445,7 @@ PRODUCTS = [
         "description": "Mug that reveals colors with hot liquid",
         "rating": 4.7,
         "stock": 30,
-        "image_color": "#073B4C",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": True,
         "original_price": 29.99,
         "tags": ["Magic", "Fun"]
@@ -485,7 +459,7 @@ PRODUCTS = [
         "description": "16.8 million color RGB gaming mouse",
         "rating": 4.9,
         "stock": 7,
-        "image_color": "#9B5DE5",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": False,
         "tags": ["Gaming", "RGB"]
     },
@@ -498,7 +472,7 @@ PRODUCTS = [
         "description": "Color gradient lenses with UV protection",
         "rating": 4.3,
         "stock": 18,
-        "image_color": "#F8961E",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": True,
         "original_price": 59.99,
         "tags": ["Summer", "Style"]
@@ -512,7 +486,7 @@ PRODUCTS = [
         "description": "Soft pastel colors with glitter accents",
         "rating": 4.6,
         "stock": 22,
-        "image_color": "#FF6B6B",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": False,
         "tags": ["Pastel", "Cute"]
     },
@@ -525,7 +499,7 @@ PRODUCTS = [
         "description": "Vibrant neon lip colors for bold looks",
         "rating": 4.8,
         "stock": 14,
-        "image_color": "#4ECDC4",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": True,
         "original_price": 49.99,
         "tags": ["Beauty", "Vibrant"]
@@ -539,7 +513,7 @@ PRODUCTS = [
         "description": "Colorful brush set with rainbow handles",
         "rating": 4.9,
         "stock": 9,
-        "image_color": "#FFD166",
+        "image_color": random.choice(list(COLORS.values())),
         "on_sale": False,
         "tags": ["Art", "Creative"]
     }
@@ -573,7 +547,6 @@ def clear_cart():
     """Clear all items from cart"""
     st.session_state.cart.clear()
     st.success("✨ Cart cleared!")
-    st.rerun()
 
 def toggle_wishlist(product_id):
     """Add/remove from wishlist"""
@@ -584,7 +557,6 @@ def toggle_wishlist(product_id):
         st.session_state.wishlist.add(product_id)
         st.success("💖 Added to wishlist!")
         st.balloons()
-    st.rerun()
 
 def checkout():
     """Process checkout with colorful celebration"""
@@ -603,30 +575,33 @@ def checkout():
     st.session_state.orders.append(order)
     st.session_state.cart.clear()
     
-    # Success message
+    # Celebration effects
     st.balloons()
-    st.markdown(f"""
-    <div style='
-        background: linear-gradient(135deg, {COLORS['success']}, {COLORS['secondary']});
-        padding: 2rem;
-        border-radius: 20px;
-        color: white;
-        text-align: center;
-        margin: 2rem 0;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    '>
-        <h1 style='font-size: 2.5rem; margin-bottom: 1rem;'>🎊 Order Successful!</h1>
-        <div style='font-size: 1.2rem;'>
-            <p><strong>🎯 Order ID:</strong> {order['order_id']}</p>
-            <p><strong>💰 Total:</strong> ${total:.2f}</p>
-            <p><strong>📦 Items:</strong> {sum(order['items'].values())}</p>
+    st.snow()
+    
+    # Success message in colorful container
+    with st.container():
+        st.markdown(f"""
+        <div style='
+            background: linear-gradient(135deg, {COLORS['success']}, {COLORS['secondary']});
+            padding: 2rem;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        '>
+            <h1 style='font-size: 2.5rem; margin-bottom: 1rem;'>🎊 Order Successful!</h1>
+            <div style='font-size: 1.2rem;'>
+                <p><strong>🎯 Order ID:</strong> {order['order_id']}</p>
+                <p><strong>💰 Total:</strong> ${total:.2f}</p>
+                <p><strong>📦 Items:</strong> {sum(order['items'].values())}</p>
+            </div>
+            <p style='margin-top: 1.5rem; font-size: 1.1rem;'>
+                Thank you for shopping at VibeCart! Your colorful items will be shipped soon. ✨
+            </p>
         </div>
-        <p style='margin-top: 1.5rem; font-size: 1.1rem;'>
-            Thank you for shopping at VibeCart! Your colorful items will be shipped soon. ✨
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    st.rerun()
+        """, unsafe_allow_html=True)
 
 def calculate_cart_total():
     """Calculate total cart value"""
@@ -696,7 +671,7 @@ def display_colorful_header():
             </div>
             """, unsafe_allow_html=True)
 
-def display_colorful_product_card(product, tab_name=""):
+def display_colorful_product_card(product):
     """Display individual product card with vibrant colors"""
     with st.container():
         st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
@@ -717,8 +692,10 @@ def display_colorful_product_card(product, tab_name=""):
             
             # Tags
             if "tags" in product:
+                tag_cols = st.columns(len(product["tags"]))
                 for idx, tag in enumerate(product["tags"]):
-                    st.markdown(f'<span style="background:{COLORS["info"]}20; color:{COLORS["info"]}; padding:2px 8px; border-radius:10px; font-size:0.7rem; margin-right:5px;">{tag}</span>', unsafe_allow_html=True)
+                    with tag_cols[idx]:
+                        st.markdown(f'<span style="background:{COLORS["info"]}20; color:{COLORS["info"]}; padding:2px 8px; border-radius:10px; font-size:0.7rem;">{tag}</span>', unsafe_allow_html=True)
             
             # Rating
             full_stars = int(product["rating"])
@@ -772,55 +749,46 @@ def display_colorful_product_card(product, tab_name=""):
             
             st.markdown(f'<div style="color: {stock_color}; font-size: 0.9rem; margin: 5px 0;">{stock_text}</div>', unsafe_allow_html=True)
         
-        # Action buttons with unique keys
+        # Action buttons
         col1, col2, col3 = st.columns([2, 2, 1])
         
         with col1:
-            # Unique quantity key for this tab and product
-            qty_key = f"qty_{product['id']}_{tab_name}"
             quantity = st.number_input(
                 "Quantity", 
                 min_value=1, 
                 max_value=min(10, product["stock"]), 
                 value=1,
-                key=qty_key,
+                key=f"qty_{product['id']}",
                 label_visibility="collapsed"
             )
         
         with col2:
             if product["stock"] > 0:
-                # Unique add to cart key for this tab and product
-                add_key = f"add_{product['id']}_{tab_name}"
                 if st.button(
                     "🛒 Add to Cart",
-                    key=add_key,
+                    key=f"add_{product['id']}",
                     use_container_width=True,
                     type="secondary"
                 ):
                     add_to_cart(product["id"], quantity)
             else:
-                out_key = f"out_{product['id']}_{tab_name}"
                 st.button(
                     "😔 Out of Stock",
                     disabled=True,
-                    use_container_width=True,
-                    key=out_key
+                    use_container_width=True
                 )
         
         with col3:
-            # Unique wishlist key for this tab and product
-            wish_key = f"wish_{product['id']}_{tab_name}"
             wishlist_icon = "💖" if product["id"] in st.session_state.wishlist else "🤍"
             if st.button(
                 wishlist_icon,
-                key=wish_key,
+                key=f"wish_{product['id']}",
                 use_container_width=True
             ):
                 toggle_wishlist(product["id"])
         
-        # Product details expander with unique key
-        expander_key = f"exp_{product['id']}_{tab_name}"
-        with st.expander("✨ Details & Reviews", key=expander_key):
+        # Product details expander
+        with st.expander("✨ Details & Reviews"):
             st.write(product["description"])
             st.progress(product["rating"] / 5, text=f"Rating: {product['rating']}/5")
             
@@ -834,6 +802,7 @@ def display_colorful_product_card(product, tab_name=""):
             for review in reviews:
                 st.markdown(f"**{review['user']}** ({'⭐' * review['rating']})")
                 st.caption(review["comment"])
+                st.divider()
         
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -887,7 +856,7 @@ def display_colorful_sidebar():
             </div>
             """, unsafe_allow_html=True)
         else:
-            for idx, (product_id, quantity) in enumerate(st.session_state.cart.items()):
+            for product_id, quantity in st.session_state.cart.items():
                 product = get_product_by_id(product_id)
                 if product:
                     col1, col2, col3 = st.columns([3, 2, 1])
@@ -896,8 +865,7 @@ def display_colorful_sidebar():
                     with col2:
                         st.write(f"${product['price']} × {quantity}")
                     with col3:
-                        remove_key = f"remove_{product_id}_{idx}"
-                        if st.button("🗑️", key=remove_key):
+                        if st.button("🗑️", key=f"remove_{product_id}"):
                             remove_from_cart(product_id)
             
             st.divider()
@@ -939,24 +907,24 @@ def display_colorful_sidebar():
             # Checkout buttons
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("🗑️ Clear Cart", use_container_width=True, type="secondary", key="clear_cart"):
+                if st.button("🗑️ Clear Cart", use_container_width=True, type="secondary"):
                     clear_cart()
             with col2:
-                if st.button("🚀 Checkout Now", use_container_width=True, type="primary", key="checkout"):
+                if st.button("🚀 Checkout Now", use_container_width=True, type="primary"):
                     checkout()
         
         # Wishlist section
         if st.session_state.wishlist:
             st.divider()
-            with st.expander(f"💖 Wishlist ({len(st.session_state.wishlist)})", key="wishlist_expander"):
+            with st.expander(f"💖 Wishlist ({len(st.session_state.wishlist)})"):
                 for product_id in list(st.session_state.wishlist)[:5]:
                     product = get_product_by_id(product_id)
                     if product:
                         st.write(f"{product['emoji']} {product['name']} - ${product['price']}")
         
-        # Promo code section with unique key
+        # Promo code
         st.divider()
-        with st.expander("🎁 Promo Codes", key="promo_codes_expander"):
+        with st.expander("🎁 Promo Codes"):
             st.code("VIBECART20 - 20% off all orders")
             st.code("COLORME50 - $50 off orders over $200")
             st.code("RAINBOW10 - 10% off colorful items")
@@ -966,19 +934,19 @@ def display_products_with_tabs():
     tab1, tab2, tab3, tab4 = st.tabs(["🌈 All Products", "🔥 On Sale", "💖 Wishlist", "🎯 Recommended"])
     
     with tab1:
-        display_product_grid("all_products")
+        display_product_grid()
     
     with tab2:
         sale_products = [p for p in PRODUCTS if p.get("on_sale", False)]
         if sale_products:
-            display_product_grid("on_sale", sale_products)
+            display_product_grid(sale_products)
         else:
             st.info("No items on sale at the moment")
     
     with tab3:
         wishlist_products = [p for p in PRODUCTS if p["id"] in st.session_state.wishlist]
         if wishlist_products:
-            display_product_grid("wishlist_items", wishlist_products)
+            display_product_grid(wishlist_products)
         else:
             st.info("Add items to your wishlist by clicking the 💖 button!")
     
@@ -997,54 +965,27 @@ def display_products_with_tabs():
             recommended = [p for p in PRODUCTS if p["rating"] >= 4.7][:4]
         
         if recommended:
-            display_product_grid("recommended_items", recommended[:8])
+            display_product_grid(recommended[:8])
         else:
             st.info("Browse products to get recommendations!")
 
-def display_product_grid(tab_name, products_list=None):
+def display_product_grid(products_list=None):
     """Display products in a responsive grid"""
     products = products_list or PRODUCTS
     
-    # Store filter selections per tab
-    filter_key = f"filter_{tab_name}"
-    if filter_key not in st.session_state.filter_selections:
-        st.session_state.filter_selections[filter_key] = {
-            "category": "All Categories",
-            "sort_by": "Recommended",
-            "price_range": (0, 500)
-        }
-    
-    # Filters with unique keys for each tab
+    # Filters
     col1, col2, col3 = st.columns([2, 2, 2])
     
     with col1:
-        categories = ["All Categories"] + sorted(list(set(p["category"] for p in products)))
-        selected_category = st.selectbox(
-            "Filter by Category",
-            categories,
-            key=f"category_{tab_name}",
-            index=categories.index(st.session_state.filter_selections[filter_key]["category"])
-        )
-        st.session_state.filter_selections[filter_key]["category"] = selected_category
+        categories = ["All Categories"] + list(set(p["category"] for p in products))
+        selected_category = st.selectbox("Filter", categories, key="filter_cat")
     
     with col2:
         sort_options = ["Recommended", "Price: Low to High", "Price: High to Low", "Rating", "Newest"]
-        sort_by = st.selectbox(
-            "Sort by",
-            sort_options,
-            key=f"sort_{tab_name}",
-            index=sort_options.index(st.session_state.filter_selections[filter_key]["sort_by"])
-        )
-        st.session_state.filter_selections[filter_key]["sort_by"] = sort_by
+        sort_by = st.selectbox("Sort", sort_options, key="sort_by")
     
     with col3:
-        price_range = st.slider(
-            "Price Range ($)",
-            0, 500,
-            st.session_state.filter_selections[filter_key]["price_range"],
-            key=f"price_{tab_name}"
-        )
-        st.session_state.filter_selections[filter_key]["price_range"] = price_range
+        price_range = st.slider("Price Range", 0, 500, (0, 500), key="price_range")
     
     # Filter products
     filtered_products = products.copy()
@@ -1068,14 +1009,11 @@ def display_product_grid(tab_name, products_list=None):
     st.markdown(f"### 🎨 Found **{len(filtered_products)}** colorful items")
     
     # Responsive grid
-    if filtered_products:
-        cols = st.columns(4)
-        
-        for idx, product in enumerate(filtered_products):
-            with cols[idx % 4]:
-                display_colorful_product_card(product, tab_name)
-    else:
-        st.info("No products found matching your filters. Try adjusting your search criteria!")
+    cols = st.columns(4)
+    
+    for idx, product in enumerate(filtered_products):
+        with cols[idx % 4]:
+            display_colorful_product_card(product)
 
 def display_colorful_footer():
     """Display vibrant footer"""
@@ -1148,7 +1086,9 @@ def main():
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-            '>
+                cursor: pointer;
+                transition: transform 0.3s;
+            ' onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 <div style='font-size: 2.5rem; margin-bottom: 0.5rem;'>{collection['emoji']}</div>
                 <h3 style='margin: 0;'>{collection['name']}</h3>
                 <p style='margin: 0; opacity: 0.9;'>Explore →</p>
