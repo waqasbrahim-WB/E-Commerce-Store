@@ -6,6 +6,7 @@ A vibrant, modern e-commerce application with advanced features.
 import streamlit as st
 from datetime import datetime
 import random
+import time
 
 # Page Configuration
 st.set_page_config(
@@ -295,51 +296,6 @@ st.markdown(f"""
             font-size: 2.5rem;
         }}
     }}
-    
-    /* Loading animation */
-    .loading-dots {{
-        display: inline-block;
-        position: relative;
-        width: 80px;
-        height: 80px;
-    }}
-    .loading-dots div {{
-        position: absolute;
-        top: 33px;
-        width: 13px;
-        height: 13px;
-        border-radius: 50%;
-        background: {COLORS['primary']};
-        animation-timing-function: cubic-bezier(0, 1, 1, 0);
-    }}
-    .loading-dots div:nth-child(1) {{
-        left: 8px;
-        animation: loading1 0.6s infinite;
-    }}
-    .loading-dots div:nth-child(2) {{
-        left: 8px;
-        animation: loading2 0.6s infinite;
-    }}
-    .loading-dots div:nth-child(3) {{
-        left: 32px;
-        animation: loading2 0.6s infinite;
-    }}
-    .loading-dots div:nth-child(4) {{
-        left: 56px;
-        animation: loading3 0.6s infinite;
-    }}
-    @keyframes loading1 {{
-        0% {{ transform: scale(0); }}
-        100% {{ transform: scale(1); }}
-    }}
-    @keyframes loading3 {{
-        0% {{ transform: scale(1); }}
-        100% {{ transform: scale(0); }}
-    }}
-    @keyframes loading2 {{
-        0% {{ transform: translate(0, 0); }}
-        100% {{ transform: translate(24px, 0); }}
-    }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -352,6 +308,8 @@ if 'wishlist' not in st.session_state:
     st.session_state.wishlist = set()
 if 'viewed_products' not in st.session_state:
     st.session_state.viewed_products = []
+if 'product_counter' not in st.session_state:
+    st.session_state.product_counter = 0
 
 # Enhanced Product Data with More Items
 PRODUCTS = [
@@ -364,7 +322,7 @@ PRODUCTS = [
         "description": "Vibrant colorful sneakers with rainbow gradient design",
         "rating": 4.7,
         "stock": 15,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#FF6B6B",
         "on_sale": True,
         "original_price": 119.99,
         "tags": ["Trending", "Limited"]
@@ -378,7 +336,7 @@ PRODUCTS = [
         "description": "RGB LED headphones with neon glow and 40hr battery",
         "rating": 4.9,
         "stock": 8,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#4ECDC4",
         "on_sale": False,
         "tags": ["Bestseller", "New"]
     },
@@ -391,7 +349,7 @@ PRODUCTS = [
         "description": "Organic cotton tie-dye t-shirt in psychedelic colors",
         "rating": 4.5,
         "stock": 25,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#FFD166",
         "on_sale": True,
         "original_price": 39.99,
         "tags": ["Eco-Friendly"]
@@ -405,7 +363,7 @@ PRODUCTS = [
         "description": "Color-changing display with animated watch faces",
         "rating": 4.8,
         "stock": 5,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#06D6A0",
         "on_sale": False,
         "tags": ["Premium", "Smart"]
     },
@@ -418,7 +376,7 @@ PRODUCTS = [
         "description": "Waterproof backpack with color-changing panels",
         "rating": 4.6,
         "stock": 12,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#118AB2",
         "on_sale": True,
         "original_price": 139.99,
         "tags": ["Waterproof"]
@@ -432,7 +390,7 @@ PRODUCTS = [
         "description": "Non-slip yoga mat with mandala rainbow pattern",
         "rating": 4.4,
         "stock": 20,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#EF476F",
         "on_sale": False,
         "tags": ["Fitness"]
     },
@@ -445,7 +403,7 @@ PRODUCTS = [
         "description": "Mug that reveals colors with hot liquid",
         "rating": 4.7,
         "stock": 30,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#073B4C",
         "on_sale": True,
         "original_price": 29.99,
         "tags": ["Magic", "Fun"]
@@ -459,7 +417,7 @@ PRODUCTS = [
         "description": "16.8 million color RGB gaming mouse",
         "rating": 4.9,
         "stock": 7,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#9B5DE5",
         "on_sale": False,
         "tags": ["Gaming", "RGB"]
     },
@@ -472,7 +430,7 @@ PRODUCTS = [
         "description": "Color gradient lenses with UV protection",
         "rating": 4.3,
         "stock": 18,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#F8961E",
         "on_sale": True,
         "original_price": 59.99,
         "tags": ["Summer", "Style"]
@@ -486,7 +444,7 @@ PRODUCTS = [
         "description": "Soft pastel colors with glitter accents",
         "rating": 4.6,
         "stock": 22,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#FF6B6B",
         "on_sale": False,
         "tags": ["Pastel", "Cute"]
     },
@@ -499,7 +457,7 @@ PRODUCTS = [
         "description": "Vibrant neon lip colors for bold looks",
         "rating": 4.8,
         "stock": 14,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#4ECDC4",
         "on_sale": True,
         "original_price": 49.99,
         "tags": ["Beauty", "Vibrant"]
@@ -513,7 +471,7 @@ PRODUCTS = [
         "description": "Colorful brush set with rainbow handles",
         "rating": 4.9,
         "stock": 9,
-        "image_color": random.choice(list(COLORS.values())),
+        "image_color": "#FFD166",
         "on_sale": False,
         "tags": ["Art", "Creative"]
     }
@@ -534,14 +492,12 @@ def add_to_cart(product_id, quantity=1):
             st.session_state.viewed_products.pop(0)
     
     st.success(f"🎉 Added to cart! 🛒")
-    st.balloons()
 
 def remove_from_cart(product_id):
     """Remove product from cart"""
     if product_id in st.session_state.cart:
         del st.session_state.cart[product_id]
         st.success("🗑️ Item removed from cart")
-        st.rerun()
 
 def clear_cart():
     """Clear all items from cart"""
@@ -556,7 +512,6 @@ def toggle_wishlist(product_id):
     else:
         st.session_state.wishlist.add(product_id)
         st.success("💖 Added to wishlist!")
-        st.balloons()
 
 def checkout():
     """Process checkout with colorful celebration"""
@@ -575,33 +530,29 @@ def checkout():
     st.session_state.orders.append(order)
     st.session_state.cart.clear()
     
-    # Celebration effects
+    # Success message
     st.balloons()
-    st.snow()
-    
-    # Success message in colorful container
-    with st.container():
-        st.markdown(f"""
-        <div style='
-            background: linear-gradient(135deg, {COLORS['success']}, {COLORS['secondary']});
-            padding: 2rem;
-            border-radius: 20px;
-            color: white;
-            text-align: center;
-            margin: 2rem 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        '>
-            <h1 style='font-size: 2.5rem; margin-bottom: 1rem;'>🎊 Order Successful!</h1>
-            <div style='font-size: 1.2rem;'>
-                <p><strong>🎯 Order ID:</strong> {order['order_id']}</p>
-                <p><strong>💰 Total:</strong> ${total:.2f}</p>
-                <p><strong>📦 Items:</strong> {sum(order['items'].values())}</p>
-            </div>
-            <p style='margin-top: 1.5rem; font-size: 1.1rem;'>
-                Thank you for shopping at VibeCart! Your colorful items will be shipped soon. ✨
-            </p>
+    st.markdown(f"""
+    <div style='
+        background: linear-gradient(135deg, {COLORS['success']}, {COLORS['secondary']});
+        padding: 2rem;
+        border-radius: 20px;
+        color: white;
+        text-align: center;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    '>
+        <h1 style='font-size: 2.5rem; margin-bottom: 1rem;'>🎊 Order Successful!</h1>
+        <div style='font-size: 1.2rem;'>
+            <p><strong>🎯 Order ID:</strong> {order['order_id']}</p>
+            <p><strong>💰 Total:</strong> ${total:.2f}</p>
+            <p><strong>📦 Items:</strong> {sum(order['items'].values())}</p>
         </div>
-        """, unsafe_allow_html=True)
+        <p style='margin-top: 1.5rem; font-size: 1.1rem;'>
+            Thank you for shopping at VibeCart! Your colorful items will be shipped soon. ✨
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 def calculate_cart_total():
     """Calculate total cart value"""
@@ -619,6 +570,11 @@ def get_cart_count():
 def get_product_by_id(product_id):
     """Get product by ID"""
     return next((p for p in PRODUCTS if p["id"] == product_id), None)
+
+def get_unique_key(prefix):
+    """Generate unique key for widgets"""
+    st.session_state.product_counter += 1
+    return f"{prefix}_{st.session_state.product_counter}"
 
 # Colorful UI Components
 def display_colorful_header():
@@ -671,7 +627,7 @@ def display_colorful_header():
             </div>
             """, unsafe_allow_html=True)
 
-def display_colorful_product_card(product):
+def display_colorful_product_card(product, tab_name=""):
     """Display individual product card with vibrant colors"""
     with st.container():
         st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
@@ -749,24 +705,28 @@ def display_colorful_product_card(product):
             
             st.markdown(f'<div style="color: {stock_color}; font-size: 0.9rem; margin: 5px 0;">{stock_text}</div>', unsafe_allow_html=True)
         
-        # Action buttons
+        # Action buttons - Using unique keys for each product in each tab
         col1, col2, col3 = st.columns([2, 2, 1])
         
         with col1:
+            # Unique key for quantity input
+            qty_key = f"qty_{product['id']}_{tab_name}"
             quantity = st.number_input(
                 "Quantity", 
                 min_value=1, 
                 max_value=min(10, product["stock"]), 
                 value=1,
-                key=f"qty_{product['id']}",
+                key=qty_key,
                 label_visibility="collapsed"
             )
         
         with col2:
             if product["stock"] > 0:
+                # Unique key for add to cart button
+                add_key = f"add_{product['id']}_{tab_name}"
                 if st.button(
                     "🛒 Add to Cart",
-                    key=f"add_{product['id']}",
+                    key=add_key,
                     use_container_width=True,
                     type="secondary"
                 ):
@@ -779,16 +739,19 @@ def display_colorful_product_card(product):
                 )
         
         with col3:
+            # Unique key for wishlist button
+            wish_key = f"wish_{product['id']}_{tab_name}"
             wishlist_icon = "💖" if product["id"] in st.session_state.wishlist else "🤍"
             if st.button(
                 wishlist_icon,
-                key=f"wish_{product['id']}",
+                key=wish_key,
                 use_container_width=True
             ):
                 toggle_wishlist(product["id"])
         
-        # Product details expander
-        with st.expander("✨ Details & Reviews"):
+        # Product details expander - Unique key
+        expander_key = f"exp_{product['id']}_{tab_name}"
+        with st.expander("✨ Details & Reviews", key=expander_key):
             st.write(product["description"])
             st.progress(product["rating"] / 5, text=f"Rating: {product['rating']}/5")
             
@@ -802,7 +765,6 @@ def display_colorful_product_card(product):
             for review in reviews:
                 st.markdown(f"**{review['user']}** ({'⭐' * review['rating']})")
                 st.caption(review["comment"])
-                st.divider()
         
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -865,8 +827,10 @@ def display_colorful_sidebar():
                     with col2:
                         st.write(f"${product['price']} × {quantity}")
                     with col3:
-                        if st.button("🗑️", key=f"remove_{product_id}"):
+                        remove_key = f"remove_cart_{product_id}"
+                        if st.button("🗑️", key=remove_key):
                             remove_from_cart(product_id)
+                            st.rerun()
             
             st.divider()
             
@@ -909,9 +873,11 @@ def display_colorful_sidebar():
             with col1:
                 if st.button("🗑️ Clear Cart", use_container_width=True, type="secondary"):
                     clear_cart()
+                    st.rerun()
             with col2:
                 if st.button("🚀 Checkout Now", use_container_width=True, type="primary"):
                     checkout()
+                    st.rerun()
         
         # Wishlist section
         if st.session_state.wishlist:
@@ -921,32 +887,25 @@ def display_colorful_sidebar():
                     product = get_product_by_id(product_id)
                     if product:
                         st.write(f"{product['emoji']} {product['name']} - ${product['price']}")
-        
-        # Promo code
-        st.divider()
-        with st.expander("🎁 Promo Codes"):
-            st.code("VIBECART20 - 20% off all orders")
-            st.code("COLORME50 - $50 off orders over $200")
-            st.code("RAINBOW10 - 10% off colorful items")
 
 def display_products_with_tabs():
     """Display products with colorful tabs"""
     tab1, tab2, tab3, tab4 = st.tabs(["🌈 All Products", "🔥 On Sale", "💖 Wishlist", "🎯 Recommended"])
     
     with tab1:
-        display_product_grid()
+        display_product_grid("all")
     
     with tab2:
         sale_products = [p for p in PRODUCTS if p.get("on_sale", False)]
         if sale_products:
-            display_product_grid(sale_products)
+            display_product_grid("sale", sale_products)
         else:
             st.info("No items on sale at the moment")
     
     with tab3:
         wishlist_products = [p for p in PRODUCTS if p["id"] in st.session_state.wishlist]
         if wishlist_products:
-            display_product_grid(wishlist_products)
+            display_product_grid("wishlist", wishlist_products)
         else:
             st.info("Add items to your wishlist by clicking the 💖 button!")
     
@@ -955,147 +914,4 @@ def display_products_with_tabs():
         recommended = []
         if st.session_state.viewed_products:
             for product_id in st.session_state.viewed_products:
-                product = get_product_by_id(product_id)
-                if product:
-                    # Get products from same category
-                    category_products = [p for p in PRODUCTS if p["category"] == product["category"] and p["id"] != product_id]
-                    recommended.extend(category_products[:2])
-        
-        if not recommended:
-            recommended = [p for p in PRODUCTS if p["rating"] >= 4.7][:4]
-        
-        if recommended:
-            display_product_grid(recommended[:8])
-        else:
-            st.info("Browse products to get recommendations!")
-
-def display_product_grid(products_list=None):
-    """Display products in a responsive grid"""
-    products = products_list or PRODUCTS
-    
-    # Filters
-    col1, col2, col3 = st.columns([2, 2, 2])
-    
-    with col1:
-        categories = ["All Categories"] + list(set(p["category"] for p in products))
-        selected_category = st.selectbox("Filter", categories, key="filter_cat")
-    
-    with col2:
-        sort_options = ["Recommended", "Price: Low to High", "Price: High to Low", "Rating", "Newest"]
-        sort_by = st.selectbox("Sort", sort_options, key="sort_by")
-    
-    with col3:
-        price_range = st.slider("Price Range", 0, 500, (0, 500), key="price_range")
-    
-    # Filter products
-    filtered_products = products.copy()
-    
-    if selected_category != "All Categories":
-        filtered_products = [p for p in filtered_products if p["category"] == selected_category]
-    
-    filtered_products = [p for p in filtered_products if price_range[0] <= p["price"] <= price_range[1]]
-    
-    # Sort products
-    if sort_by == "Price: Low to High":
-        filtered_products.sort(key=lambda x: x["price"])
-    elif sort_by == "Price: High to Low":
-        filtered_products.sort(key=lambda x: x["price"], reverse=True)
-    elif sort_by == "Rating":
-        filtered_products.sort(key=lambda x: x["rating"], reverse=True)
-    elif sort_by == "Newest":
-        filtered_products.sort(key=lambda x: x["id"], reverse=True)
-    
-    # Display count
-    st.markdown(f"### 🎨 Found **{len(filtered_products)}** colorful items")
-    
-    # Responsive grid
-    cols = st.columns(4)
-    
-    for idx, product in enumerate(filtered_products):
-        with cols[idx % 4]:
-            display_colorful_product_card(product)
-
-def display_colorful_footer():
-    """Display vibrant footer"""
-    st.markdown("""
-    <div class='footer'>
-        <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;'>
-            <div>
-                <h3 style='color: white;'>🌈 VibeCart</h3>
-                <p>Your colorful shopping destination</p>
-                <p>Making shopping vibrant since 2024</p>
-            </div>
-            <div>
-                <h4 style='color: white;'>Quick Links</h4>
-                <p>🎯 New Arrivals</p>
-                <p>🔥 Best Sellers</p>
-                <p>💖 Wishlist</p>
-                <p>🛍️ Collections</p>
-            </div>
-            <div>
-                <h4 style='color: white;'>Support</h4>
-                <p>📞 1-800-COLORFUL</p>
-                <p>✉️ help@vibecart.com</p>
-                <p>📍 Color Street 123</p>
-                <p>🕒 24/7 Support</p>
-            </div>
-            <div>
-                <h4 style='color: white;'>Stay Colorful</h4>
-                <p>📱 Follow us on Instagram</p>
-                <p>🐦 Tweet with #VibeCart</p>
-                <p>📧 Subscribe for colorful deals</p>
-                <p>⭐ Rate us 5 stars</p>
-            </div>
-        </div>
-        <hr style='border-color: rgba(255,255,255,0.2); margin: 2rem 0;'>
-        <div style='text-align: center; color: rgba(255,255,255,0.8);'>
-            <p>© 2024 VibeCart. All rights reserved. | Made with ❤️ and 🌈 | This is a demo e-commerce application.</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Main App
-def main():
-    """Main app function"""
-    display_colorful_header()
-    display_colorful_sidebar()
-    display_products_with_tabs()
-    
-    # Featured collections
-    st.markdown("---")
-    st.markdown("## 🎨 Colorful Collections")
-    
-    collections = [
-        {"name": "Rainbow Collection", "emoji": "🌈", "color": COLORS["primary"]},
-        {"name": "Pastel Dreams", "emoji": "🌸", "color": COLORS["purple"]},
-        {"name": "Neon Nights", "emoji": "🌃", "color": COLORS["warning"]},
-        {"name": "Gradient Glow", "emoji": "🎆", "color": COLORS["secondary"]}
-    ]
-    
-    cols = st.columns(4)
-    for idx, collection in enumerate(collections):
-        with cols[idx]:
-            st.markdown(f"""
-            <div style='
-                background: linear-gradient(135deg, {collection['color']}, {collection['color']}80);
-                padding: 2rem;
-                border-radius: 15px;
-                color: white;
-                text-align: center;
-                height: 150px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                cursor: pointer;
-                transition: transform 0.3s;
-            ' onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                <div style='font-size: 2.5rem; margin-bottom: 0.5rem;'>{collection['emoji']}</div>
-                <h3 style='margin: 0;'>{collection['name']}</h3>
-                <p style='margin: 0; opacity: 0.9;'>Explore →</p>
-            </div>
-            """, unsafe_allow_html=True)
-    
-    display_colorful_footer()
-
-if __name__ == "__main__":
-    main()
+                product = get
