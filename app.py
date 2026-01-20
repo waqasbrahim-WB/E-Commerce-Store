@@ -6,7 +6,6 @@ A vibrant, modern e-commerce application with advanced features.
 import streamlit as st
 from datetime import datetime
 import random
-import time
 
 # Page Configuration
 st.set_page_config(
@@ -300,16 +299,19 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # Initialize session state
-if 'cart' not in st.session_state:
-    st.session_state.cart = {}
-if 'orders' not in st.session_state:
-    st.session_state.orders = []
-if 'wishlist' not in st.session_state:
-    st.session_state.wishlist = set()
-if 'viewed_products' not in st.session_state:
-    st.session_state.viewed_products = []
-if 'product_counter' not in st.session_state:
-    st.session_state.product_counter = 0
+def init_session_state():
+    if 'cart' not in st.session_state:
+        st.session_state.cart = {}
+    if 'orders' not in st.session_state:
+        st.session_state.orders = []
+    if 'wishlist' not in st.session_state:
+        st.session_state.wishlist = set()
+    if 'viewed_products' not in st.session_state:
+        st.session_state.viewed_products = []
+    if 'filter_selections' not in st.session_state:
+        st.session_state.filter_selections = {}
+
+init_session_state()
 
 # Enhanced Product Data with More Items
 PRODUCTS = [
@@ -492,6 +494,7 @@ def add_to_cart(product_id, quantity=1):
             st.session_state.viewed_products.pop(0)
     
     st.success(f"🎉 Added to cart! 🛒")
+    st.balloons()
 
 def remove_from_cart(product_id):
     """Remove product from cart"""
@@ -512,6 +515,7 @@ def toggle_wishlist(product_id):
     else:
         st.session_state.wishlist.add(product_id)
         st.success("💖 Added to wishlist!")
+        st.balloons()
 
 def checkout():
     """Process checkout with colorful celebration"""
@@ -570,11 +574,6 @@ def get_cart_count():
 def get_product_by_id(product_id):
     """Get product by ID"""
     return next((p for p in PRODUCTS if p["id"] == product_id), None)
-
-def get_unique_key(prefix):
-    """Generate unique key for widgets"""
-    st.session_state.product_counter += 1
-    return f"{prefix}_{st.session_state.product_counter}"
 
 # Colorful UI Components
 def display_colorful_header():
@@ -705,11 +704,11 @@ def display_colorful_product_card(product, tab_name=""):
             
             st.markdown(f'<div style="color: {stock_color}; font-size: 0.9rem; margin: 5px 0;">{stock_text}</div>', unsafe_allow_html=True)
         
-        # Action buttons - Using unique keys for each product in each tab
+        # Action buttons - Unique keys for each tab
         col1, col2, col3 = st.columns([2, 2, 1])
         
         with col1:
-            # Unique key for quantity input
+            # Unique quantity key for this tab
             qty_key = f"qty_{product['id']}_{tab_name}"
             quantity = st.number_input(
                 "Quantity", 
@@ -722,7 +721,7 @@ def display_colorful_product_card(product, tab_name=""):
         
         with col2:
             if product["stock"] > 0:
-                # Unique key for add to cart button
+                # Unique add to cart key for this tab
                 add_key = f"add_{product['id']}_{tab_name}"
                 if st.button(
                     "🛒 Add to Cart",
@@ -735,11 +734,12 @@ def display_colorful_product_card(product, tab_name=""):
                 st.button(
                     "😔 Out of Stock",
                     disabled=True,
-                    use_container_width=True
+                    use_container_width=True,
+                    key=f"out_{product['id']}_{tab_name}"
                 )
         
         with col3:
-            # Unique key for wishlist button
+            # Unique wishlist key for this tab
             wish_key = f"wish_{product['id']}_{tab_name}"
             wishlist_icon = "💖" if product["id"] in st.session_state.wishlist else "🤍"
             if st.button(
@@ -871,11 +871,11 @@ def display_colorful_sidebar():
             # Checkout buttons
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("🗑️ Clear Cart", use_container_width=True, type="secondary"):
+                if st.button("🗑️ Clear Cart", use_container_width=True, type="secondary", key="clear_cart_btn"):
                     clear_cart()
                     st.rerun()
             with col2:
-                if st.button("🚀 Checkout Now", use_container_width=True, type="primary"):
+                if st.button("🚀 Checkout Now", use_container_width=True, type="primary", key="checkout_btn"):
                     checkout()
                     st.rerun()
         
@@ -887,31 +887,29 @@ def display_colorful_sidebar():
                     product = get_product_by_id(product_id)
                     if product:
                         st.write(f"{product['emoji']} {product['name']} - ${product['price']}")
+        
+        # Promo code
+        st.divider()
+        with st.expander("🎁 Promo Codes", key="promo_expander"):
+            st.code("VIBECART20 - 20% off all orders")
+            st.code("COLORME50 - $50 off orders over $200")
+            st.code("RAINBOW10 - 10% off colorful items")
 
-def display_products_with_tabs():
-    """Display products with colorful tabs"""
-    tab1, tab2, tab3, tab4 = st.tabs(["🌈 All Products", "🔥 On Sale", "💖 Wishlist", "🎯 Recommended"])
+def display_product_grid(tab_name, products_list=None):
+    """Display products in a responsive grid with unique keys per tab"""
+    products = products_list or PRODUCTS
     
-    with tab1:
-        display_product_grid("all")
+    # Store filter selections per tab
+    filter_key = f"filter_{tab_name}"
+    if filter_key not in st.session_state.filter_selections:
+        st.session_state.filter_selections[filter_key] = {
+            "category": "All Categories",
+            "sort_by": "Recommended",
+            "price_range": (0, 500)
+        }
     
-    with tab2:
-        sale_products = [p for p in PRODUCTS if p.get("on_sale", False)]
-        if sale_products:
-            display_product_grid("sale", sale_products)
-        else:
-            st.info("No items on sale at the moment")
+    # Filters with unique keys for each tab
+    col1, col2, col3 = st.columns([2, 2, 2])
     
-    with tab3:
-        wishlist_products = [p for p in PRODUCTS if p["id"] in st.session_state.wishlist]
-        if wishlist_products:
-            display_product_grid("wishlist", wishlist_products)
-        else:
-            st.info("Add items to your wishlist by clicking the 💖 button!")
-    
-    with tab4:
-        # Recently viewed + recommendations
-        recommended = []
-        if st.session_state.viewed_products:
-            for product_id in st.session_state.viewed_products:
-                product = get
+    with col1:
+        categories = ["All Categories"] + sorted(list(set(p["category"] for p in products)))
